@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import connectToDB from "./db";
 import userRoute from "./api/user";
 import cors from "cors";
-
+import courseRoute from "./api/course"
 import passport from "passport";
 import dotenv from "dotenv";
 dotenv.config();
@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(cors());
 app.use("/user",userRoute);
+app.use("/course",courseRoute);
 
 connectToDB();
 const PORT = process.env.PORT||3001;

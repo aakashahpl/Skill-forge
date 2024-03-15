@@ -61,7 +61,7 @@ const SingUp = () => {
         // console.log(text);
     }
 
-    // run();
+    run();
 
     const formSchema = z.object({
         email: z.string().email({
