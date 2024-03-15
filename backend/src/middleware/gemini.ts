@@ -38,14 +38,6 @@ async function generateCourseModules(req:any, res:any, next:any) {
         const response = await result.response;
         const text = response.text();
         const jsonWithoutBackticks = text.replace(/^```json|```$/g, "");
-        // Parse the JSON data
-        // console.log(jsonWithoutBackticks);
-        // const parsedData = JSON.parse(jsonWithoutBackticks);
-
-        // Store the array of objects in a variable
-
-        // Output the variable containing the array of objects
-        // console.log(parsedData);
 
         req.courseModules = jsonWithoutBackticks; 
 
