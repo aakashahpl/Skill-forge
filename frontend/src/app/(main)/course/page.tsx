@@ -1,4 +1,5 @@
 'use client'
+import axios from "axios";
 import React, { useState } from 'react';
 
 import {
@@ -14,7 +15,14 @@ import { MessageSquareCode, Sparkles } from 'lucide-react';
 const CreateCourseModule: React.FC = () => {
   const [courseName, setCourseName] = useState('');
 
-  const handleCreateCourse = () => {
+  let reqOptions = {
+    url: `http://localhost:3001/course/save/${courseName}`,
+    method: "POST",
+  }
+
+  const handleCreateCourse = async () => {
+    let response = await axios.request(reqOptions);
+    console.log(response.data)
     // Logic to create the course with the provided courseName
     console.log(`Creating course: ${courseName}`);
     // Reset the courseName field after creating the course
@@ -120,3 +128,4 @@ const Page = () => {
 };
 
 export default Page;
+

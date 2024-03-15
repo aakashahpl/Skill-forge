@@ -5,13 +5,13 @@ import generateCourseModules from "../middleware/gemini";
 
 const Router2 = express.Router();
 
-Router2.post("/save/:prompt",generateCourseModules, async (req:any, res) => {
+Router2.post("/save/:prompt", generateCourseModules, async (req: any, res) => {
     try {
         // console.log(req.courseModules);
         const courseData = JSON.parse(req.courseModules);
         console.log(courseData.course);
-        const  courseDetails  = courseData.course; 
-        
+        const courseDetails = courseData.course;
+
         // Use a validation library like Joi or express-validator for more robust validation 
         // if (!courseDetails || !courseDetails.title || !courseDetails.modules || !courseDetails.modules.length) {
         //     return res.status(400).json({ error: "Course details are incomplete." }); 
@@ -26,11 +26,11 @@ Router2.post("/save/:prompt",generateCourseModules, async (req:any, res) => {
         const savedCourse = await newCourse.save();
 
         // // 4. Send Success Response
-        res.status(201).json({course: savedCourse });
+        res.status(201).json(savedCourse);
 
-    } catch (error:any) {
-      
-        res.json({message:error.message})
+    } catch (error: any) {
+
+        res.json({ message: error.message })
     }
 });
 
