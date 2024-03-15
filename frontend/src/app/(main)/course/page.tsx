@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { MessageSquareCode, Sparkles } from 'lucide-react';
 
 const CreateCourseModule: React.FC = () => {
   const [courseName, setCourseName] = useState('');
@@ -24,7 +25,14 @@ const CreateCourseModule: React.FC = () => {
     <Dialog>
       <DialogTrigger>
         <div className="h-[300px] w-[300px] justify-center items-center px-14 pt-28 text-2xl text-center text-white rounded-md aspect-square bg-zinc-800 max-md:px-5 max-md:mt-10">
-          Create a new course
+          <div className=" flex flex-row">
+            <span>
+              <Sparkles size={40} className=' text-left' />
+            </span>
+            <span className=' text-neutral-300'>
+              Create a new course
+            </span>
+          </div>
         </div>
       </DialogTrigger>
       <DialogContent>
@@ -65,7 +73,7 @@ const CreateCourseModule_: React.FC = () => (
   <Dialog>
     <DialogTrigger>
 
-      <div className="h-[300px] w-[300px] justify-center items-center px-14 pt-28 text-2xl text-center text-white rounded-md aspect-square bg-zinc-800 max-md:px-5 max-md:mt-10">
+      <div className="h-[300px] w-[300px] justify-center items-center px-14 pt-28 text-xl text-center text-white rounded-md aspect-square bg-zinc-800 max-md:px-5 max-md:mt-10">
         Create a new course
       </div>
     </DialogTrigger>
@@ -83,7 +91,8 @@ const CreateCourseModule_: React.FC = () => (
 
 const CourseModule: React.FC<{ title: string }> = ({ title }) => (
   <div className="h-[300px] w-[300px] justify-center items-center p-3  text-xl text-center  rounded-md aspect-square  max-md:px-5 bg-zinc-800 max-md:mt-10">
-    <div className="h-[80%] w-full  mb-4 rounded-md bg-slate-800" />
+    <div className="h-[80%] w-full  mb-4 rounded-md bg-slate-800 relative " />
+    <MessageSquareCode className=' absolute ' />
     <div className="flex flex-col justify-between h-[20%]">
       <div className="text-lg font-semibold text-gray-400">{title}</div>
     </div>
@@ -93,19 +102,19 @@ const CourseModule: React.FC<{ title: string }> = ({ title }) => (
 const sampleCourseTitles = [
   "Introduction to React",
   "JavaScript Basics",
-  "Data Structures and Algorithms",
-  "User Interface Design",
-  "Data Structures and Algorithms",
   "User Interface Design",
 ];
 
 const Page = () => {
   return (
-    <div className='text-white grid grid-cols-5 gap-y-16'>
+    <div className='text-white grid grid-cols-5 gap-y-  h-screen'>
       {sampleCourseTitles.map((title, index) => (
         <CourseModule key={index} title={title} />
       ))}
-      <CreateCourseModule />
+      <div className="h-[300px] w-[300px]">
+        <CreateCourseModule />
+      </div>
+
     </div>
   );
 };
