@@ -1,10 +1,10 @@
 'use client';
 import Quiz from "@/components/ui/quiz";
-import { time } from "console";
-import { Content } from "next/font/google";
 import { useSearchParams } from "next/navigation";
 import * as React from "react";
 import { CopyBlock, dracula } from 'react-code-blocks';
+import axios from "axios";
+import { json } from "stream/consumers";
 
 const testCode = `
 // select relevant elements
@@ -61,10 +61,30 @@ const CodeBlock = ({
 };
 
 const SkillForge: React.FC = () => {
-
   const searchPrama = useSearchParams();
-  const courseName = searchPrama.get('course-name')
-  const topicName = searchPrama.get('topic-name')
+  const courseName = searchPrama.get('_id')
+  const topicName = searchPrama.get('module_number')
+  const [blogData, setBlogData] = React.useState<any>([])
+
+  React.useEffect(() => {
+    console.log("getting blog data")
+    const fetchData = async () => {
+      let reqOptions = {
+        url: `http://localhost:3001/course/detailedcourse?_id=${courseName}&module_number=${topicName}`,
+        method: "GET",
+      }
+      let response = await axios.request(reqOptions);
+      try {
+        const data = JSON.parse(response.data).content
+        setBlogData(data)
+      } catch (error) { }
+      console.log(data);
+    }
+    fetchData()
+  }, [])
+
+
+
 
   return (
     <div className="flex flex-col font-medium    ">
@@ -88,38 +108,43 @@ const SkillForge: React.FC = () => {
           </div>
         </div>
         {/* nav bar ends */}
+        {
 
 
-        {/* blog starts */}
-        <section className="flex justify-center">
-          <div className="w-[50%] text-wrap">
-            {
-              data3.map((item, index) => (
-                <div className="">
-                  {/* headding */}
-                  <Text title={item.topic} description={item.content} />
-                  {/* code block */}
-                  {
-                    (item.code_example.length > 0) ?
-                      <div className=" text-2xl py-7">
-                        < CopyBlock
-                          text={item.code_example.join('\n')}
-                          language={'Python'}
-                          showLineNumbers={false}
-                          theme={dracula}
-                        />
-                      </div>
-                      : null
-                  }
-                  {/* quiz */}
-                  <Quiz data={item.quiz} />
-                </div>
-              ))
-            }
-          </div>
-        </section>
+          (blogData.length === 0) ? (<div className="">
+            Generating content...
+          </div>) : (
+
+            < section className="flex justify-center">
+              <div className="w-[50%] text-wrap">
+                {
+                  data.map((item, index) => (
+                    <div className="">
+                      {/* headding */}
+                      <Text title={item.topic} description={item.content} />
+                      {/* code block */}
+                      {
+                        (item.code_example.length > 0) ?
+                          <div className=" text-2xl py-7">
+                            < CopyBlock
+                              text={item.code_example.join('\n')}
+                              language={'Python'}
+                              showLineNumbers={false}
+                              theme={dracula}
+                            />
+                          </div>
+                          : null
+                      }
+                      {/* quiz */}
+                      <Quiz data={item.quiz} />
+                    </div>
+                  ))
+                }
+              </div>
+            </section>
+          )}
       </div>
-    </div>
+    </div >
   );
 };
 

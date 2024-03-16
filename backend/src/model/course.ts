@@ -17,6 +17,11 @@ const courseSchema = new mongoose.Schema({
                     type: String,
                     required: true,
                 },
+                material:{
+                    type:String,
+                    required:false,
+                 
+                }
             },
         ],
     
