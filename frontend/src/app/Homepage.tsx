@@ -1,3 +1,4 @@
+import { Link } from "lucide-react";
 import * as React from "react";
 
 interface CourseModuleProps {
@@ -18,10 +19,12 @@ const CourseModule = ({ children }: children) => {
         {/* nav bar */}
         <div className=" shadow-lg shadow-black flex gap-5 justify-between px-16 py-7 w-full font-medium  bg-zinc-800 max-md:flex-wrap max-md:px-5 max-md:max-w-full fixed z-20 ">
           <div className=" text-md flex gap-5 justify-between my-auto  text-white max-md:flex-wrap">
-            <div className="grow text-2xl whitespace-nowrap ">Skill Forge</div>
+            <a href="/">
+              <div className="font-bold text-xl">Skill Forge</div>
+            </a>
             <div>Theory Module </div>
             <div>Multiple-choice</div>
-            <div className="grow whitespace-nowrap">Code writing</div>
+            <div>Code writing</div>
           </div>
           <div className="flex gap-2.5 text-sm whitespace-nowrap">
             <div className="grow justify-center px-6 py-4 text-black bg-white rounded-2xl max-md:px-5 text-xl">
