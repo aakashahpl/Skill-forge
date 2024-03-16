@@ -75,13 +75,29 @@ const SkillForge: React.FC = () => {
       }
       let response = await axios.request(reqOptions);
       try {
-        const data = JSON.parse(response.data).content
-        setBlogData(data)
+        // const data = JSON.parse(response.data).content
+        const data = response.data
+        const data_ = data[Object.keys(data)[0]];
+        setBlogData(data_)
+        console.log("code blck " + arrayToParagraph(data_.code_example))
+        console.log("recived data ", data_)
       } catch (error) { }
       console.log(data);
     }
     fetchData()
   }, [])
+
+
+  function arrayToParagraph(array: string[]) {
+    let paragraph = '';
+    for (let i = 0; i < array.length; i++) {
+      paragraph += array[i];
+      if (i !== array.length - 1) {
+        paragraph += '\n'; // Add space between words
+      }
+    }
+    return paragraph;
+  }
 
 
 
@@ -93,7 +109,7 @@ const SkillForge: React.FC = () => {
         {/* nav bar  */}
         <div className="flex  gap-5 justify-between px-16 py-7 w-full font-medium  bg-zinc-800 max-md:flex-wrap max-md:px-5 max-md:max-w-full">
           <div className=" text-md flex gap-5 justify-between my-auto  text-white max-md:flex-wrap">
-            <div className="grow text-2xl whitespace-nowrap ">Course Craft</div>
+            <div className="grow text-2xl whitespace-nowrap ">Skill Forge</div>
             <div>Theory Module </div>
             <div>Multiple-choice</div>
             <div className="grow whitespace-nowrap">Code writing</div>
@@ -118,22 +134,22 @@ const SkillForge: React.FC = () => {
             < section className="flex justify-center">
               <div className="w-[50%] text-wrap">
                 {
-                  data.map((item, index) => (
+                  blogData.map((item, index) => (
                     <div className="">
                       {/* headding */}
                       <Text title={item.topic} description={item.content} />
                       {/* code block */}
                       {
-                        (item.code_example.length > 0) ?
-                          <div className=" text-2xl py-7">
-                            < CopyBlock
+                        item.code_example && (
+                          <div className="text-2xl py-7">
+                            <CopyBlock
                               text={item.code_example.join('\n')}
                               language={'Python'}
-                              showLineNumbers={false}
+                              showLineNumbers={true}
                               theme={dracula}
                             />
                           </div>
-                          : null
+                        )
                       }
                       {/* quiz */}
                       <Quiz data={item.quiz} />

@@ -41,10 +41,10 @@ export async function generateCourseModules(req: any, res: any, next: any) {
 
         req.courseModules = jsonWithoutBackticks;
 
-        next(); // Proceed to the next middleware or route handler
+        next();
     } catch (error) {
         console.error("Error generating course modules:", error);
-        next(error); // Pass the error to Express error handling
+        next(error);
     }
 }
 
@@ -53,7 +53,7 @@ export async function generateDetailedModules(req: any, res: any, next: any) {
         const courseId = req.query._id;
         const moduleNumber = req.query.module_number;
 
-        // Input Validation (adjust as needed)
+
         if (!courseId || !moduleNumber) {
             return res
                 .status(400)
@@ -69,54 +69,57 @@ export async function generateDetailedModules(req: any, res: any, next: any) {
             return;
         }
 
-        const prompt = `Instructions:
-    
-            1. User Input: I will provide the following:
-               topic: ${course.modules[moduleNumber].description}
-               language: choose according to the topic
+        const prompt = `*Instructions*
+
+            1. *User Input:* I will provide the following:
+               * *topic:*  The specific data structure or algorithm to teach
+               * *language:* The programming language for examples and implementations
             
-            2. Structure: Generate course content in JSON...  Ensure you provide at least four content sections and four quizzes. Include small code examples where-ever possible.Focus on these core subtopics
-                Introduction to <topic>
-                Key concepts or techniques within <topic>
-                Very short code examples for the <topic> in <language>
-                Advanced topics within <topic>
+            2. *Structure:* Generate course content in JSON...  Ensure you provide minimum four content sections and one quiz per section. Include small code examples where-ever possible. Focus on these core subtopics:
+               * Introduction to <topic>
+               * Key concepts or techniques within <topic>
+               * Very short code examples for the <topic> in <language>
+               * Advanced topics within <topic> (if applicable)
+            
+                                              
               json
               {
-                ""topic"": [ 
+                "<topic> in <language>": [
                   {
-                    "topic" : "topic of the content"
                     "content": "Textual explanation of a concept (one or more paragraphs)",
                     "quiz": [
-                    {
-                    "question": "Multiple-choice question about the concept",
-                    "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    "correct": "The single correct answer"
-                    }
-                       /* More quiz questions as needed */
+                      {
+                        "question": "Multiple-choice question about the concept",
+                        "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+                        "correct": "The single correct answer"
+                      }
                     ],
-                    "code_example": [ 
-                      "code line 1", 
+                    "code_example": [
+                      "code line 1",
                       "code line 2",
-                      # ... more lines as needed
                     ]
                   }
                    /* More content sections as needed */
-                ] 
+                ]
               }
+              
+              
+              *User Input*
+              * *topic:* ${course.modules[moduleNumber].description}
+              * *language:* decided by gemini
               `;
 
         const result: any = await model.generateContent(prompt);
         const response = await result.response;
         const text = response.text();
-
+        // console.log(text);
         const jsonWithoutBackticks = text.replace(/^```json|```$/g, "");
         // course.modules[moduleNumber].material = jsonWithoutBackticks;
-        console.log(jsonWithoutBackticks);
-        // const parsedData = JSON.parse(jsonWithoutBackticks);
-        res.status(200).json(jsonWithoutBackticks);
+        // console.log(jsonWithoutBackticks);
+        const parsedData = JSON.parse(jsonWithoutBackticks);
+        console.log(parsedData);
+        res.status(200).json(parsedData);
         // res.status(200).json(course.modules[moduleNumber].material);
-
-        // req.courseModules = jsonWithoutBackticks;
 
 
         next(); // Proceed to the next middleware or route handler
