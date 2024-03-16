@@ -1,5 +1,6 @@
 'use client';
 import Quiz from "@/components/ui/quiz";
+import { time } from "console";
 import { Content } from "next/font/google";
 import * as React from "react";
 import { CopyBlock, dracula } from 'react-code-blocks';
@@ -86,17 +87,29 @@ const SkillForge: React.FC = () => {
         {/* blog starts */}
         <section className="flex justify-center">
           <div className="w-[50%] text-wrap">
-            <Text title={"Maintaining & Operating Socket.IO"} description={"As explained above, getting started with Socket.IO is relatively simple  all you need is a Node.js server to run it on. If you want to get started with a realtime app for a limited number of users, Socket.IO is a good option. Problems come when working at scale. Say, for example, you want to build a CRM-like app that enables communications between businesses. Socket.IO is built on asynchronous networking libraries and will cause load on your server. Maintaining connections to users as well as sending and receiving messages adds strain, and if clients start sending significant amounts of data via Socket.IO, it streams data in chunks, freeing up resources when the data chunk is transmitted. So when your application attracts more users and your server reaches its maximum load you will need to split connections over multiple servers, or risk losing important informati"} />
-            <div className=" text-2xl py-7">
-              <CopyBlock
-                text={testCode}
-                language={'Python'}
-                showLineNumbers={true}
-                theme={dracula}
-              />
-            </div>
-            <Quiz data={data[0].quiz} />
-
+            {
+              data2["Advanced layout techniques in Tailwind CSS"].map((item, index) => (
+                <div className="">
+                  {/* headding */}
+                  <Text title={"Advanced layout techneque"} description={item.content} />
+                  {/* code block */}
+                  {
+                    (item.code_example.length > 0) ?
+                      <div className=" text-2xl py-7">
+                        < CopyBlock
+                          text={item.code_example.join('\n')}
+                          language={'Python'}
+                          showLineNumbers={false}
+                          theme={dracula}
+                        />
+                      </div>
+                      : null
+                  }
+                  {/* quiz */}
+                  <Quiz data={item.quiz} />
+                </div>
+              ))
+            }
           </div>
         </section>
       </div>
@@ -162,4 +175,78 @@ const data =
       ]
     }
   ]
+
+
+const data2 = {
+  "Advanced layout techniques in Tailwind CSS": [
+    {
+      "content": "Tailwind CSS is a utility-first CSS framework that allows you to rapidly build custom designs. It provides a wide range of utility classes that you can use to style your website, including classes for flexbox, grid, and responsive layouts.",
+      "quiz": [
+        {
+          "question": "What is the main benefit of using Tailwind CSS?",
+          "options": ["It is easy to learn and use", "It provides a wide range of utility classes", "It is highly customizable", "All of the above"],
+          "correct": "All of the above"
+        }
+        /* More quiz questions as needed */
+      ],
+      "code_example": []
+    },
+    {
+      "content": "Flexbox is a one-dimensional layout system that allows you to align and distribute items in a flexible way. It is perfect for creating responsive layouts that can adapt to different screen sizes.",
+      "quiz": [
+        {
+          "question": "Which property is used to control the direction of a flexbox layout?",
+          "options": ["flex-direction", "flex-wrap", "justify-content", "align-items"],
+          "correct": "flex-direction"
+        }
+        /* More quiz questions as needed */
+      ],
+      "code_example": [
+        ".container {",
+        "  display: flex;",
+        "  flex-direction: row;",
+        "  justify-content: center;",
+        "  align-items: center;",
+        "}"
+      ]
+    },
+    {
+      "content": "Grid is a two-dimensional layout system, which provides more control over the layout of your content. It is ideal for creating complex layouts, such as dashboards and e-commerce websites.",
+      "quiz": [
+        {
+          "question": "Which property is used to control the number of columns in a grid layout?",
+          "options": ["grid-template-columns", "grid-template-rows", "grid-gap", "justify-items"],
+          "correct": "grid-template-columns"
+        }
+        /* More quiz questions as needed */
+      ],
+      "code_example": [
+        ".grid-container {",
+        "  display: grid;",
+        "  grid-template-columns: repeat(3, 1fr);",
+        "  grid-gap: 1rem;",
+        "}"
+      ]
+    },
+    {
+      "content": "Responsive layouts are essential for creating websites that work well on all devices. Tailwind CSS provides a range of utility classes that you can use to create responsive layouts, such as classes for breakpoints, media queries, and utility classes for hiding and showing content.",
+      "quiz": [
+        {
+          "question": "Which media query is used to target devices with a width of 768px or less?",
+          "options": ["@media (max-width: 768px)", "@media (min-width: 768px)", "@media (max-width: 767px)", "@media (min-width: 769px"],
+          "correct": "@media (max-width: 768px)"
+        }
+        /* More quiz questions as needed */
+      ],
+      "code_example": [
+        "@media (max-width: 768px) {",
+        "  .container {",
+        "    display: flex;",
+        "    flex-direction: column;",
+        "  }",
+        "}"
+      ]
+    }
+  ]
+}
 export default SkillForge;

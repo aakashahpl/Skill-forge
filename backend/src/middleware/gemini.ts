@@ -1,7 +1,7 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-async function generateCourseModules(req:any, res:any, next:any) {
+async function generateCourseModules(req: any, res: any, next: any) {
     try {
         const genAI = new GoogleGenerativeAI(
             "AIzaSyAC6CWSxzL9GgDdIoBrYd830ZhRb_eQT9w"
@@ -39,7 +39,7 @@ async function generateCourseModules(req:any, res:any, next:any) {
         const text = response.text();
         const jsonWithoutBackticks = text.replace(/^```json|```$/g, "");
 
-        req.courseModules = jsonWithoutBackticks; 
+        req.courseModules = jsonWithoutBackticks;
 
         next(); // Proceed to the next middleware or route handler
     } catch (error) {

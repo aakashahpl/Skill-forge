@@ -1,23 +1,20 @@
 'use client'
 import { Skeleton } from "@/components/ui/skeleton";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { Padauk } from "next/font/google";
 import * as React from "react";
+import { useSearchParams } from "next/navigation";
+import axios from "axios";
 
 interface CourseModuleProps {
   title: string;
   description: string;
-  assignment: string;
-  rating: number;
-  progress: boolean;
+  time: string
 }
 
 const CourseModule: React.FC<CourseModuleProps> = ({
   title,
   description,
-  assignment,
-  rating,
-  progress,
+  time
 }) => {
 
   return (
@@ -34,14 +31,13 @@ const CourseModule: React.FC<CourseModuleProps> = ({
                 <div className="font-medium text-2xl text-neutral-100">{title}</div>
                 <div className=" text-[1rem]">
                   <div className="mt-4 text-neutral-300">{description}</div>
-                  <div className="mt-2.5">{assignment}</div>
                 </div>
               </div>
               {/* quiz section */}
               <div className="flex gap-1.5 text-base font-medium ">
                 <div className="grow my-auto">Time required to complete</div>
                 <div className="grow justify-center px-4 py-2 bg-red-500 rounded-2xl text-xl ">
-                  {"4"} <span>Hours</span>
+                  {time} <span>Hours</span>
                 </div>
               </div>
             </div>
@@ -62,72 +58,25 @@ const CourseModule: React.FC<CourseModuleProps> = ({
   );
 };
 
-interface CourseCardProps {
-  title: string;
-  rating: number;
-}
-
-const courseModules: CourseModuleProps[] = [
-  {
-    title: "Course Module 1",
-    description: "Introduction to topic",
-    assignment: "Practice assignment",
-    rating: 8.6,
-    progress: true,
-  },
-  {
-    title: "Course Module 2",
-    description: "Introduction to topic",
-    assignment: "Practice assignment",
-    rating: 8.6,
-    progress: false,
-  },
-  {
-    title: "Course Module 3",
-    description: "Introduction to topic",
-    assignment: "Practice assignment",
-    rating: 8.6,
-    progress: false,
-  },
-];
 
 const App: React.FC = () => {
+
   const [courseModule, setCourseModules] = React.useState<CourseModuleProps[]>([])
-  const genAI = new GoogleGenerativeAI("AIzaSyAC6CWSxzL9GgDdIoBrYd830ZhRb_eQT9w");
-  async function run() {
-    // For text-only input, use the gemini-pro model
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  const searchPrama = useSearchParams();
+  const id_ = searchPrama.get('id')
+  console.log("id " + id_)
 
-    const prompt = `Make me a course on mongodb. suggest multiple modules on the Course along with the estimated time required to complete the course. Start with the basics first. Return me the output in JSON in the following format.
-        Example output:
-        [
-            {
-                "title": "Python Basics",
-                "description": "Learn the basics of Python programming"
-                "time-required": "2 hours"
-            },
-            {
-                "title": "Python Advanced",
-                "description": "Learn advanced Python programming"
-                "time-required": "10 hours"
-            }
-            ...MORE MODULES...
-        ]`
-
-    const result: any = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    const jsonWithoutBackticks = text.replace(/^```json|```$/g, '');
-    // Parse the JSON data
-    const parsedData = JSON.parse(jsonWithoutBackticks);
-    // Store the array of objects in a variable
-    // Output the variable containing the array of objects
-    console.log(parsedData);
-    setCourseModules(parsedData)
-    console.log(courseModule);
-  }
   React.useEffect(() => {
-    run()
+    const fetchData = async () => {
+      let reqOptions = {
+        url: `http://localhost:3001/course/fetch/${id_}`,
+        method: "GET",
+      }
+      let response = await axios.request(reqOptions);
+      console.log(response.data);
+      setCourseModules(response.data)
+    }
+    fetchData()
   }, [])
 
   if (courseModule.length === 0) {
@@ -138,18 +87,15 @@ const App: React.FC = () => {
     </div>
   }
 
-
   return (
     <div>
       {
-        courseModule.map((module, index) => (
+        courseModule.modules.map((module, index) => (
           <CourseModule
             key={index}
             title={module.title}
             description={module.description}
-            assignment={module.assignment}
-            rating={module.rating}
-            progress={module.progress}
+            time={module.timeRequired}
           />
         ))
       }

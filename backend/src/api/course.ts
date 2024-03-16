@@ -26,11 +26,7 @@ Router2.post("/save/:prompt", generateCourseModules, async (req: any, res) => {
         const savedCourse = await newCourse.save();
 
         // // 4. Send Success Response
-<<<<<<< HEAD
         res.status(201).json(savedCourse);
-=======
-        res.status(201).json( savedCourse );
->>>>>>> 1396c037713d1aa819607046cc704813e214f304
 
     } catch (error: any) {
 
@@ -53,7 +49,7 @@ Router2.get("/getAll", async (req, res) => {
 
 Router2.get("/fetch/:_id", async (req, res) => {
     try {
-        const courseId = req.params._id; 
+        const courseId = req.params._id;
 
         // Validate the courseId using Mongoose's ObjectId type
         if (!mongoose.isValidObjectId(courseId)) {

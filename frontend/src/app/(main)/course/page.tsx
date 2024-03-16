@@ -1,6 +1,9 @@
 'use client'
 import axios from "axios";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation'
+
+
 
 import {
   Dialog,
@@ -10,11 +13,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { MessageSquareCode, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
-const CreateCourseModule: React.FC = () => {
-  const [courseName, setCourseName] = useState('');
-
+const CreateCourseModule: React.FC = ({ getCourseTitles }: { getCourseTitles: any }) => {
+  const [courseName, setCourseName] = useState([]);
   let reqOptions = {
     url: `http://localhost:3001/course/save/${courseName}`,
     method: "POST",
@@ -26,9 +28,9 @@ const CreateCourseModule: React.FC = () => {
     // Logic to create the course with the provided courseName
     console.log(`Creating course: ${courseName}`);
     // Reset the courseName field after creating the course
+    getCourseTitles() // Fetch the updated list of courses after creating a new course
     setCourseName('');
   };
-
   return (
     <Dialog>
       <DialogTrigger>
@@ -62,7 +64,7 @@ const CreateCourseModule: React.FC = () => {
             value={courseName}
             onChange={(e) => setCourseName(e.target.value)}
             placeholder="Enter course name"
-            className="w-full px-4 py-2 my-4 text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:border-blue-500"
+            className="w-full px-4 py-2 my-4 text-neutral-300 border border-gray-700 rounded-md focus:outline-none focus:border-blue-500"
           />
           <button
             onClick={handleCreateCourse}
@@ -76,51 +78,43 @@ const CreateCourseModule: React.FC = () => {
   );
 };
 
-const CreateCourseModule_: React.FC = () => (
 
-  <Dialog>
-    <DialogTrigger>
-
-      <div className="h-[300px] w-[300px] justify-center items-center px-14 pt-28 text-xl text-center text-white rounded-md aspect-square bg-zinc-800 max-md:px-5 max-md:mt-10">
-        Create a new course
+const CourseModule: React.FC<{ title: string, id: string }> = ({ title, id }) => {
+  const router = useRouter()
+  return (
+    <div
+      onClick={() => router.push(`/course-content?id=${id}`)}
+      className="h-[300px] w-[300px] justify-center items-center p-3  text-xl text-center  rounded-md aspect-square  max-md:px-5 bg-zinc-800 max-md:mt-10 border hover:border-neutral-400   ">
+      <div className="h-[80%] w-full  mb-4 rounded-md bg-slate-800 relative " />
+      <div className="flex flex-col justify-between h-[20%]">
+        <div className="text-lg font-semibold text-gray-400">{title}</div>
       </div>
-    </DialogTrigger>
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>Are you absolutely sure?</DialogTitle>
-        <DialogDescription>
-          This action cannot be undone. This will permanently delete your account
-          and remove your data from our servers.
-        </DialogDescription>
-      </DialogHeader>
-    </DialogContent>
-  </Dialog>
-);
-
-const CourseModule: React.FC<{ title: string }> = ({ title }) => (
-  <div className="h-[300px] w-[300px] justify-center items-center p-3  text-xl text-center  rounded-md aspect-square  max-md:px-5 bg-zinc-800 max-md:mt-10">
-    <div className="h-[80%] w-full  mb-4 rounded-md bg-slate-800 relative " />
-    <MessageSquareCode className=' absolute ' />
-    <div className="flex flex-col justify-between h-[20%]">
-      <div className="text-lg font-semibold text-gray-400">{title}</div>
     </div>
-  </div>
-);
-
-const sampleCourseTitles = [
-  "Introduction to React",
-  "JavaScript Basics",
-  "User Interface Design",
-];
+  )
+};
 
 const Page = () => {
+  const fetchCourseTitles = async () => {
+    let reqOptions = {
+      url: "http://localhost:3001/course/getAll",
+      method: "GET",
+    }
+    let response = await axios.request(reqOptions);
+    console.log(response.data);
+    setCourseTitles(response.data)
+  }
+  useEffect(() => {
+    fetchCourseTitles();
+  }, [])
+  const [courseTitles, setCourseTitles] = useState([]);
+
   return (
     <div className='text-white grid grid-cols-5 gap-y-  h-screen'>
-      {sampleCourseTitles.map((title, index) => (
-        <CourseModule key={index} title={title} />
+      {courseTitles.map((title, index) => (
+        <CourseModule key={index} title={title.title} id={title._id} />
       ))}
       <div className="h-[300px] w-[300px]">
-        <CreateCourseModule />
+        <CreateCourseModule getCourseTitles={fetchCourseTitles} />
       </div>
 
     </div>
@@ -128,4 +122,3 @@ const Page = () => {
 };
 
 export default Page;
-
