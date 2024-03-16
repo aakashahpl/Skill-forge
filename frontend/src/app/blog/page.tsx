@@ -2,6 +2,7 @@
 import Quiz from "@/components/ui/quiz";
 import { time } from "console";
 import { Content } from "next/font/google";
+import { useSearchParams } from "next/navigation";
 import * as React from "react";
 import { CopyBlock, dracula } from 'react-code-blocks';
 
@@ -60,6 +61,11 @@ const CodeBlock = ({
 };
 
 const SkillForge: React.FC = () => {
+
+  const searchPrama = useSearchParams();
+  const courseName = searchPrama.get('course-name')
+  const topicName = searchPrama.get('topic-name')
+
   return (
     <div className="flex flex-col font-medium    ">
       <div className="flex overflow-hidden relative flex-col w-full">
@@ -88,10 +94,10 @@ const SkillForge: React.FC = () => {
         <section className="flex justify-center">
           <div className="w-[50%] text-wrap">
             {
-              data2["Advanced layout techniques in Tailwind CSS"].map((item, index) => (
+              data3.map((item, index) => (
                 <div className="">
                   {/* headding */}
-                  <Text title={"Advanced layout techneque"} description={item.content} />
+                  <Text title={item.topic} description={item.content} />
                   {/* code block */}
                   {
                     (item.code_example.length > 0) ?
@@ -175,8 +181,6 @@ const data =
       ]
     }
   ]
-
-
 const data2 = {
   "Advanced layout techniques in Tailwind CSS": [
     {
@@ -249,4 +253,69 @@ const data2 = {
     }
   ]
 }
+
+const data3 = [
+  {
+    "topic": "Introduction to Functions",
+    "content": "A function is a block of code that performs a specific task. It is designed to be reusable, meaning that it can be called multiple times with different inputs to produce different outputs. Functions are used to organize code into logical units, making it easier to read, understand, and maintain.",
+    "quiz": [
+      {
+        "question": "What is the purpose of a function?",
+        "options": ["To perform a specific task", "To store data", "To define a class", "To create a loop"],
+        "correct": "To perform a specific task"
+      }
+    ],
+    "code_example": [
+      "def greet(name):",
+      "  print(f\"Hello, {name}!\")"
+    ]
+  },
+  {
+    "topic": "Key Concepts and Techniques",
+    "content": "Functions can take arguments, which are input values that are passed to the function when it is called. The function can then use these arguments to perform its task. Functions can also return values, which are output values that are produced by the function when it is called.",
+    "quiz": [
+      {
+        "question": "What is the difference between an argument and a return value?",
+        "options": ["Arguments are passed into a function, while return values are produced by a function", "Arguments are used to store data, while return values are used to define a class", "Arguments are optional, while return values are required", "Return values are passed into a function, while arguments are produced by a function"],
+        "correct": "Arguments are passed into a function, while return values are produced by a function"
+      }
+    ],
+    "code_example": [
+      "def sum(a, b):",
+      "  return a + b"
+    ]
+  },
+  {
+    "topic": "Code Examples",
+    "content": "The following are some examples of simple functions in Python:",
+    "quiz": [
+      {
+        "question": "Which of the following is a valid Python function?",
+        "options": ["def greet(name): print(f\"Hello, {name}!\")", "def greet(name): return f\"Hello, {name}!\")", "def greet = (name): print(f\"Hello, {name}!\")", "def (name): print(f\"Hello, {name}!\")"],
+        "correct": "def greet(name): print(f\"Hello, {name}!\")"
+      }
+    ],
+    "code_example": [
+      "def greet(name):",
+      "  print(f\"Hello, {name}!\")"
+    ]
+  },
+  {
+    "topic": "Advanced Topics",
+    "content": "Functions can be nested, meaning that a function can be called from within another function. Functions can also be passed as arguments to other functions, which is known as a higher-order function.",
+    "quiz": [
+      {
+        "question": "What is a nested function?",
+        "options": ["A function that is called from within another function", "A function that is passed as an argument to another function", "A function that returns another function", "A function that is defined within a class"],
+        "correct": "A function that is called from within another function"
+      }
+    ],
+    "code_example": [
+      "def outer_function():",
+      "  def inner_function():",
+      "    print(\"Hello from the inner function!\")",
+      "  inner_function()"
+    ]
+  }
+]
 export default SkillForge;

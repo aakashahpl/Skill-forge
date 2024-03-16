@@ -1,8 +1,19 @@
 'use client'
 import axios from "axios";
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
+const accessKey = '0R3dr0MM-2tQmxYR0vkH67l9qDB0k3jiY3GIROwQpMI';
 
+// Function to search for images based on keywords
+async function searchImages(query) {
+  try {
+    const response = await axios.get(`https://api.unsplash.com/search/photos?query=${query}&client_id=${accessKey}`);
+    return response.data.results;
+  } catch (error) {
+    console.error('Error fetching images:', error);
+    return [];
+  }
+}
 
 
 import {
@@ -13,7 +24,38 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Sparkles } from 'lucide-react';
+import { DivideCircle, ImageUp, Sparkles, SquareDashedBottomCode } from 'lucide-react';
+
+const CourseCard: React.FC = ({ title, id, _id }) => {
+  const router = useRouter()
+
+  return (
+    <div
+      className="block rounded-lg shadow-secondary-1 bg-zinc-800 w-[25rem]">
+      <div
+        className="relative overflow-hidden bg-cover flex justify-center "
+      >
+        <div className=" text-neutral-700 ">
+          <SquareDashedBottomCode size={300} strokeWidth={1} />
+        </div>
+      </div>
+      <div className="p-6 text-surface  ">
+        <h5 className="mb-2 text-xl font-medium leading-tight">{title}</h5>
+        <p className="mb-4 text-base text-neutral-400">
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </p>
+        <button
+          onClick={() => router.push(`/course-content?id=${_id}`)}
+          className="inline-block rounded bg-red-500/70 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+          data-twe-ripple-init
+          data-twe-ripple-color="light">
+          Start course
+        </button>
+      </div>
+    </div>
+  )
+}
 
 const CreateCourseModule: React.FC = ({ getCourseTitles }: { getCourseTitles: any }) => {
   const [courseName, setCourseName] = useState([]);
@@ -31,10 +73,15 @@ const CreateCourseModule: React.FC = ({ getCourseTitles }: { getCourseTitles: an
     getCourseTitles() // Fetch the updated list of courses after creating a new course
     setCourseName('');
   };
+
+
+
+
+
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="h-[300px] w-[300px] justify-center items-center px-14 pt-28 text-2xl text-center text-white rounded-md aspect-square bg-zinc-800 max-md:px-5 max-md:mt-10">
+        <div className="  h-[300px] w-[300px] justify-center items-center px-14 pt-28 text-2xl text-center text-white rounded-md aspect-square bg-zinc-800 max-md:px-5 max-md:mt-10">
           <div className=" flex flex-row">
             <span>
               <Sparkles size={40} className=' text-left' />
@@ -109,14 +156,16 @@ const Page = () => {
   const [courseTitles, setCourseTitles] = useState([]);
 
   return (
-    <div className='text-white grid grid-cols-5 gap-y-  h-screen'>
-      {courseTitles.map((title, index) => (
-        <CourseModule key={index} title={title.title} id={title._id} />
-      ))}
-      <div className="h-[300px] w-[300px]">
-        <CreateCourseModule getCourseTitles={fetchCourseTitles} />
+    <div className="bg-zinc-900 h-screen">
+      <div className='text-white grid grid-cols-4 gap-y-10  '>
+        {courseTitles.map((title, index) => (
+          // <CourseModule key={index} title={title.title} id={title._id} />
+          <CourseCard title={title.title} id={index} _id={title._id} />
+        ))}
+        <div className="h-[300px] w-[300px]">
+          <CreateCourseModule getCourseTitles={fetchCourseTitles} />
+        </div>
       </div>
-
     </div>
   );
 };

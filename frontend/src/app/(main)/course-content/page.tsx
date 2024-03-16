@@ -2,24 +2,33 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import * as React from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
+import { Atom } from "lucide-react";
 
 interface CourseModuleProps {
   title: string;
   description: string;
   time: string
+  index: string
+  _id: string
 }
 
 const CourseModule: React.FC<CourseModuleProps> = ({
   title,
   description,
-  time
+  time,
+  index,
+  _id
 }) => {
 
+  const router = useRouter()
   return (
     <div className=" px-4 py-4 rounded-xl bg-zinc-800 max-md:max-w-full mb-12 w-[80%] h-[20.7rem]" >
       <div className=" justify-start flex max-md:flex-col ">
+        <div className=" absolute text-neutral-400">
+          <Atom size={300} strokeWidth={1} />
+        </div>
         {/* image  */}
         <div className="  shrink-0  rounded-xl  bg-zinc-500 w-[300px] h-[300px]  " />
         {/* text and button */}
@@ -47,7 +56,9 @@ const CourseModule: React.FC<CourseModuleProps> = ({
               <div className=" text-xl justify-center self-start px-6 py-2.5 text-black rounded-full bg-zinc-300 max-md:px-5">
                 Progress
               </div>
-              <div className=" text-xl justify-center items-center px-16 py-3 text-white bg-red-500 rounded-3xl max-md:px-5">
+              <div
+                onClick={() => { router.push(`/blog?_id=${_id}&module_number=${index}`) }}
+                className=" cursor-pointer text-xl justify-center items-center px-16 py-3 text-white bg-red-500 rounded-3xl max-md:px-5">
                 Start topic
               </div>
             </div>
@@ -93,6 +104,8 @@ const App: React.FC = () => {
         courseModule.modules.map((module, index) => (
           <CourseModule
             key={index}
+            _id={id_}
+            index={index}
             title={module.title}
             description={module.description}
             time={module.timeRequired}
