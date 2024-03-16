@@ -20,7 +20,7 @@ const verifyToken = (req:any, res:any, next:any) => {
       return res.status(401).json({ message: 'Unauthorized: Invalid token' });
     }
 
-    // If token is valid, attach the decoded payload to the request object
+
     req.user = decoded;
     next();
   });
