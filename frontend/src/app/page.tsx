@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import backgroundImageDesktop from '../../../Images/Skill_Forge_logo.png'; // Desktop background image
-import backgroundImageMobile from '../../../Images/Skill_Forge_logo.png';   // Mobile background image
+import backgroundImageDesktop from '../../public/landing.jpg'; // Desktop background image
+import backgroundImageMobile from '../../public/landing.jpg';   // Mobile background image
 import Link from 'next/link'
 
 import { Mate_SC } from "next/font/google";
@@ -30,7 +30,7 @@ const Page = () => {
 
       }}
     >
-      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <div className="absolute inset-0"></div>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <div className="text-white text-center">
           <h1 className={` text-9xl font-bold mb-4 ${matesc.className}`}>Skill Forge</h1>
