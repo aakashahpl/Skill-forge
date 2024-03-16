@@ -1,7 +1,8 @@
 import express from "express";
 import courseModel from "../model/course";
 import mongoose from "mongoose";
-import generateCourseModules from "../middleware/gemini";
+import {generateCourseModules} from "../middleware/gemini";
+import { generateDetailedModules } from "../middleware/gemini";
 
 const Router2 = express.Router();
 
@@ -70,6 +71,11 @@ Router2.get("/fetch/:_id", async (req, res) => {
     }
 });
 
+
+Router2.get("/detailedcourse",generateDetailedModules,(req,res)=>{
+    
+    console.log("nothing");
+})
 
 
 
